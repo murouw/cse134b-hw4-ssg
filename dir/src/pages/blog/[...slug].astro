@@ -1,21 +1,16 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
-import { render } from 'astro:content';
+// src/pages/blog/[slug].astro
+import { getMarkdownContent } from '../../utils/markdownParser';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
-export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
-}
-type Props = CollectionEntry<'blog'>;
-
-const post = Astro.props;
-const { Content } = await render(post);
+const { slug } = Astro.params;
+const post = await getMarkdownContent(slug); // A function to load and parse the specific post
 ---
 
-<BlogPost {...post.data}>
-	<Content />
-</BlogPost>
+<BaseLayout title={post.title}>
+  <article>
+    <h1>{post.title}</h1>
+    <p>{post.date}</p>
+    <div>{post.content}</div> <!-- Render the full content of the post here -->
+  </article>
+</BaseLayout>

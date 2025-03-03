@@ -1,0 +1,15 @@
+---
+// BlogPost.astro
+const { title, date, content, slug } = Astro.props;
+---
+
+<article>
+  <header>
+    <h2><a href={`/posts/${slug}`}>{title}</a></h2>
+    <time datetime={date}>{new Date(date).toLocaleDateString()}</time>
+  </header>
+  <section>
+    <p>{content}</p>
+  </section>
+</article>
+
